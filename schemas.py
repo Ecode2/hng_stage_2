@@ -37,7 +37,7 @@ class UserModel(BaseModel):
                         ]})
         return v
     @field_validator('password')
-    def check_firstName(cls, v):
+    def check_password(cls, v):
         if not v and not isinstance(v, str):
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, 
                         detail={"errors":[
