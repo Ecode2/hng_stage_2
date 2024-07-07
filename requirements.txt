@@ -6,3 +6,4 @@ python-dotenv
 passlib 
 jose
 python-jose
+psycopg2-binary
