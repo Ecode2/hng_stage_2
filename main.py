@@ -12,9 +12,10 @@ app.add_middleware(
   allow_headers = ['*']
 )
 
-from routes import auth
+from routes import auth, user
 
 app.include_router(auth.router)
+app.include_router(user.router)
 
 models.Base.metadata.create_all(db.engine)
 print("db created")
