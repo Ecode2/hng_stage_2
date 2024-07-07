@@ -7,9 +7,10 @@ from jose.exceptions import JWTError
 from fastapi import HTTPException, status
 from db.db import get_db
 from sqlalchemy.orm import Session
+from db import models
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 SECRET_KEY = '9cd7882c137a23457275763b226d4538f0d6272c517223771d46463b095af150'
 ALGORITHM = 'HS256'
@@ -36,16 +37,16 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = str(payload.get("sub"))
-        if username is None:
+        user: str = str(payload.get("sub"))
+        if user is None:
             raise credentials_exception
         
     except JWTError:
         raise credentials_exception
     
-    user = "db_user.get_user_by_username(db, username)"
+    current_user = db.query(models.User).filter(models.User.email == user["email"]).first()
 
-    if user is None:
+    if current_user is None:
         raise credentials_exception
     
-    return user
+    return current_user.__dict__

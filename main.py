@@ -17,3 +17,4 @@ from routes import auth
 app.include_router(auth.router)
 
 models.Base.metadata.create_all(db.engine)
+print("db created")

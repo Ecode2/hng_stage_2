@@ -5,8 +5,8 @@ import os
 
 load_dotenv()
 
-#SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
-SQLALCHEMY_DATABASE_URL = "sqlite:///./hngStage2.db"
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+#SQLALCHEMY_DATABASE_URL = "sqlite:///./hngStage2.db"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
  
