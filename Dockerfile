@@ -13,8 +13,10 @@ COPY . /app
 
 
 # Install pipenv and compile dependencies
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+#RUN pip install --no-cache-dir --upgrade pip \
+#    && pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
 
 ENV DATABASE_URL="postgresql://default:HePa1sdgW7vM@ep-young-smoke-a4l644r7.us-east-1.aws.neon.tech:5432/flasker?sslmode=require"
 ENV PYTHONBUFFERED=1
