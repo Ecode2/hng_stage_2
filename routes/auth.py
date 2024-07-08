@@ -41,11 +41,12 @@ async def register_user(user_info: UserModel, db:Session = Depends(get_db)):
                             detail=f"Failed to store in DB. error {e}")
     
     get_new_user = db.query(models.User).filter(models.User.email == user_info.email)
+    user_dict = get_new_user.__dict__
 
     new_organisation = models.Organisation(
         name = f"{user_info.firstName}'s Organisation",
         description =  f"{user_info.firstName}'s new Organisation",
-        user_id = [get_new_user.__dict__["userId"]]
+        user_id = [user_dict.get("userId")]
     )
 
     db.add(new_organisation)
@@ -54,14 +55,15 @@ async def register_user(user_info: UserModel, db:Session = Depends(get_db)):
 
     user_organisation = db.query(models.Organisation).filter(models.Organisation.name == f"{user_info.firstName}'s Organisation").first()
 
-    get_new_user.update({models.User.organisation_id: [user_organisation["orgId"]]})
+    get_new_user.update({models.User.organisation_id: [user_organisation.__dict__.get("orgId")]})
     db.commit()
 
-    format_user = UserModel(**get_new_user.__dict__)
+    format_user = UserModel(**get_new_user.first().__dict__)
 
     access_token = create_access_token(data={'sub': format_user.model_dump()})
 
-    public_user = get_new_user.__dict__.pop("password")
+    public_user = get_new_user.first().__dict__
+    public_user.pop("password")
 
     return {
         "status": "success",
