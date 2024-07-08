@@ -14,7 +14,7 @@ router = APIRouter(
     )
 
 @router.get("/organisations")
-async def get_user_organisations(db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+async def get_user_organisations(db: Session = Depends(get_db), current_user = Depends(get_current_user)):
 
     user = db.query(models.User).filter(models.User.email == current_user["email"]).first().__dict__
 
@@ -34,7 +34,7 @@ async def get_user_organisations(db: Session = Depends(get_db), current_user: di
         }
 
 @router.post("/organisations", status_code=201)
-async def create_new_organisation(org_info: OrganisationModel, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+async def create_new_organisation(org_info: OrganisationModel, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
 
     try:
         new_org = models.Organisation(
@@ -63,7 +63,7 @@ async def create_new_organisation(org_info: OrganisationModel, db: Session = Dep
         }
 
 @router.post("/organisations/{orgid}/users", status_code=200)
-async def add_user_to_organisation(orgid: str, userId: str = Body(), db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+async def add_user_to_organisation(orgid: str, userId: str = Body(), db: Session = Depends(get_db), current_user = Depends(get_current_user)):
 
     user_organisation = db.query(models.Organisation).filter(models.Organisation.orgId == orgid)
     if user_organisation is None:
@@ -84,7 +84,7 @@ async def add_user_to_organisation(orgid: str, userId: str = Body(), db: Session
         }
 
 @router.get("/organisations/{orgid}")
-async def get_user_organisation(orgid: str, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+async def get_user_organisation(orgid: str, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
 
     org_info = db.query(models.Organisation).filter(models.Organisation.orgId == orgid).first()
     
@@ -103,7 +103,7 @@ async def get_user_organisation(orgid: str, db: Session = Depends(get_db), curre
 
 
 @router.get("/users/{id}")
-async def get_user_by_id(id: str, current_user: dict = Depends(get_current_user)):
+async def get_user_by_id(id: str, current_user = Depends(get_current_user)):
 
     if id == current_user["userId"]:
 

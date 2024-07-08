@@ -3,7 +3,9 @@ fastapi
 uvicorn 
 pydantic
 python-dotenv
-passlib 
-jose
+passlib
 python-jose
 psycopg2-binary
+requests
+pytest
+pyjwt

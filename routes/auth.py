@@ -76,7 +76,7 @@ async def register_user(user_info: UserModel, db:Session = Depends(get_db)):
 
 @router.post("/login", status_code=200)
 async def login_user(user_info: LoginModel, db: Session = Depends(get_db)):
-
+    
     user = db.query(models.User).filter(models.User.email == user_info.email).first()
     error = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=
                           {"status": "Bad request",
@@ -91,7 +91,8 @@ async def login_user(user_info: LoginModel, db: Session = Depends(get_db)):
     format_user = UserModel(**user.__dict__)
     access_token = create_access_token(data={'sub': format_user.model_dump()})
 
-    public_user = user.__dict__.pop("password")
+    public_user = user.__dict__
+    public_user.pop("password")
 
     return {
         "status": "success",
