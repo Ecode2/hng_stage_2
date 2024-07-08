@@ -20,6 +20,9 @@ RUN pip install --upgrade pip \
 
 ENV DATABASE_URL="postgresql://default:HePa1sdgW7vM@ep-young-smoke-a4l644r7.us-east-1.aws.neon.tech:5432/hngstage2?sslmode=require"
 ENV PYTHONBUFFERED=1
+ENV SECRET_KEY='9cd7882c137a23457275763b226d4538f0d6272c517223771d46463b095af150'
+ENV ALGORITHM='HS256'
+ENV ACCESS_TOKEN_EXPIRE_HOURS=24
 
 # Expose the port that the app runs on
 EXPOSE 8000

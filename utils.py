@@ -2,21 +2,23 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from typing import Optional
 from datetime import datetime, timedelta, timezone
-#from jose import jwt #, JWTError
-#from jose.exceptions import JWTError
+from dotenv import load_dotenv
 from fastapi import HTTPException, status
 from db.db import get_db
 from sqlalchemy.orm import Session
 from db import models
-import jwt
+import jwt, os
 from jwt.exceptions import InvalidTokenError
 
 
+load_dotenv()
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
-SECRET_KEY = '9cd7882c137a23457275763b226d4538f0d6272c517223771d46463b095af150'
-ALGORITHM = 'HS256'
-ACCESS_TOKEN_EXPIRE_HOURS = 24
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_HOURS = int(os.getenv("ACCESS_TOKEN_EXPIRE_HOURS"))
+
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
   to_encode = data.copy()

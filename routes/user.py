@@ -93,6 +93,13 @@ async def get_user_organisation(orgid: str, db: Session = Depends(get_db), curre
                           {"status": "Bad request",
                            "message": "Organisation not found",
                            "statusCode": 400})
+    
+    if current_user["userId"] not in org_info.__dict__["user_id"]:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=
+                          {"status": "Denied",
+                           "message": "Organisation access denied",
+                           "statusCode": 403})
+
     org_info.__dict__.pop("user_id")
 
     return {

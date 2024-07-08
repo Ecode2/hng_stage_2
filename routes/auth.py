@@ -58,7 +58,10 @@ async def register_user(user_info: UserModel, db:Session = Depends(get_db)):
     get_new_user.update({models.User.organisation_id: [user_organisation.__dict__.get("orgId")]})
     db.commit()
 
-    access_token = create_access_token(data={'sub': {**get_new_user.first().__dict__}})
+    user_jwt_info = get_new_user.first()
+    user_jwt_info.__dict__.pop("_sa_instance_state")
+
+    access_token = create_access_token(data={'sub': {**user_jwt_info.__dict__}})
 
     public_user = get_new_user.first().__dict__
     public_user.pop("password")
