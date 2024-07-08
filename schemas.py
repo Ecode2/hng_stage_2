@@ -9,6 +9,8 @@ class UserModel(BaseModel):
     password: str
     phone: str | None = None
 
+class OrgModel(BaseModel):
+    userId: str
 
 class LoginModel(BaseModel):
     email: EmailStr

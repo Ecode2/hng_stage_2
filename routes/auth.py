@@ -90,6 +90,7 @@ async def login_user(user_info: LoginModel, db: Session = Depends(get_db)):
     if not Hash.verify(str(user.password), user_info.password):
         raise error
     
+    user.__dict__.pop("_sa_instance_state")
     access_token = create_access_token(data={'sub': {**user.__dict__}})
 
     public_user = user.__dict__

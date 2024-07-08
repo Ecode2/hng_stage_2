@@ -5,7 +5,7 @@ from db.db import get_db
 from db import models
 from db.hash import Hash
 from utils import create_access_token, get_current_user 
-from schemas import LoginModel, OrganisationModel, UserModel
+from schemas import LoginModel, OrgModel, OrganisationModel, UserModel
 
 
 router = APIRouter(
@@ -63,17 +63,19 @@ async def create_new_organisation(org_info: OrganisationModel, db: Session = Dep
         }
 
 @router.post("/organisations/{orgid}/users", status_code=200)
-async def add_user_to_organisation(orgid: str, userId: str = Body(), db: Session = Depends(get_db), current_user = Depends(get_current_user)):
+async def add_user_to_organisation(orgid: str, userId: OrgModel, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
 
     user_organisation = db.query(models.Organisation).filter(models.Organisation.orgId == orgid)
-    if user_organisation is None:
+    if user_organisation is None or user_organisation.first().__dict__["user_id"] is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=
                           {"status": "Bad request",
                            "message": "Organisation not found",
                            "statusCode": 400})
 
-    user_ids: list = user_organisation.first().__dict__.get("user_id")
-    user_ids.append(userId)
+    otherUserInfo = db.query(models.Organisation).filter(models.Organisation.orgId == orgid).first()
+    user_ids = otherUserInfo.__dict__["user_id"]
+    if userId not in user_ids:
+        user_ids.append(userId)
 
     user_organisation.update({models.User.organisation_id: user_ids})
     db.commit()
