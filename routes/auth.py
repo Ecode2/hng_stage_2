@@ -58,9 +58,7 @@ async def register_user(user_info: UserModel, db:Session = Depends(get_db)):
     get_new_user.update({models.User.organisation_id: [user_organisation.__dict__.get("orgId")]})
     db.commit()
 
-    format_user = UserModel(**get_new_user.first().__dict__)
-
-    access_token = create_access_token(data={'sub': format_user.model_dump()})
+    access_token = create_access_token(data={'sub': {**get_new_user.first().__dict__}})
 
     public_user = get_new_user.first().__dict__
     public_user.pop("password")
@@ -78,6 +76,7 @@ async def register_user(user_info: UserModel, db:Session = Depends(get_db)):
 async def login_user(user_info: LoginModel, db: Session = Depends(get_db)):
     
     user = db.query(models.User).filter(models.User.email == user_info.email).first()
+
     error = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=
                           {"status": "Bad request",
                            "message": "Authentication Failed",
@@ -88,8 +87,7 @@ async def login_user(user_info: LoginModel, db: Session = Depends(get_db)):
     if not Hash.verify(str(user.password), user_info.password):
         raise error
     
-    format_user = UserModel(**user.__dict__)
-    access_token = create_access_token(data={'sub': format_user.model_dump()})
+    access_token = create_access_token(data={'sub': {**user.__dict__}})
 
     public_user = user.__dict__
     public_user.pop("password")
