@@ -18,7 +18,7 @@ COPY . /app
 RUN pip install --upgrade pip \
     && pip install -r requirements.txt
 
-ENV DATABASE_URL="postgresql://default:HePa1sdgW7vM@ep-young-smoke-a4l644r7.us-east-1.aws.neon.tech:5432/flasker?sslmode=require"
+ENV DATABASE_URL="postgresql://default:HePa1sdgW7vM@ep-young-smoke-a4l644r7.us-east-1.aws.neon.tech:5432/hngStage2?sslmode=require"
 ENV PYTHONBUFFERED=1
 
 # Expose the port that the app runs on
