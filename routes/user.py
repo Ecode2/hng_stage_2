@@ -72,7 +72,7 @@ async def add_user_to_organisation(orgid: str, userId: str = Body(), db: Session
                            "message": "Organisation not found",
                            "statusCode": 400})
 
-    user_ids: list = user_organisation.__dict__["user_id"]
+    user_ids: list = user_organisation.first().__dict__.get("user_id")
     user_ids.append(userId)
 
     user_organisation.update({models.User.organisation_id: user_ids})
