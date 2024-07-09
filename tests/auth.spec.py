@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 from fastapi import Depends
 from fastapi.testclient import TestClient
 import jwt
-from ..main import app
-from ..utils import create_access_token
+from main import app
+from utils import create_access_token
 
 SECRET_KEY = "testing_secret_key"
 ALGORITHM = "HS256"
@@ -46,7 +46,10 @@ def test_register_user_successfully():
     assert "accessToken" in data
     assert data["user"]["email"] == "john@example.com"
 
-    new_response = client.get(f"/organizations/{data["user"]["organisation_id"][0]}", headers={"Authorization": f"Bearer {data["accessToken"]}"}).json()
+    orgdata = data["user"]["organisation_id"][0]
+    tken = data["accessToken"]
+
+    new_response = client.get(f"/organizations/{orgdata}", headers={"Authorization": f"Bearer {tken}"}).json()
     assert new_response["name"] == "John's Organisation"
 
 def test_login_user_successfully():

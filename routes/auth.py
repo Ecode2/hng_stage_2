@@ -42,6 +42,7 @@ async def register_user(user_info: UserModel, db:Session = Depends(get_db)):
     
     get_new_user = db.query(models.User).filter(models.User.email == user_info.email)
     user_dict = get_new_user.__dict__
+    print(get_new_user.__dict__.get("userId"))
 
     new_organisation = models.Organisation(
         name = f"{user_info.firstName}'s Organisation",
