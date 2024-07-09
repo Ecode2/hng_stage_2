@@ -64,7 +64,7 @@ async def register_user(user_info: UserModel, db:Session = Depends(get_db)):
 
     access_token = create_access_token(data={'sub': {**user_jwt_info.__dict__}})
 
-    public_user = get_new_user.first().__dict__
+    public_user = user_jwt_info.__dict__
     public_user.pop("password")
 
     return {
